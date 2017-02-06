@@ -1,12 +1,7 @@
-<html>
-<head>
-    <title>User List</title>
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" >
-
-</head>
-<body>
-<div class="container">
+@extends('layouts.admin')
+@section('content')
     <div class="row">
+        <a href="{{ route('users.create') }}" class="btn btn-info"><i class="glyphicon glyphicon-plus"></i> Create User</a>
         <h2>User List</h2>
         <table class="table-bordered table">
             <tr>
@@ -27,6 +22,4 @@
         </table>
         {!! $users->links() !!}
     </div>
-</div>
-</body>
-</html>
+@stop

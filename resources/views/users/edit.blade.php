@@ -3,7 +3,7 @@
 @section('content')
     <h2>Create User</h2>
 
-    <form action="{{ route('users.store') }}" method="post">
+    <form action="{{ route('users.update', $user->id) }}" method="post">
         {{ csrf_field() }}
         <div class="form-group">
             <label for="">Role</label>
@@ -15,15 +15,15 @@
         </div>
         <div class="form-group">
             <label for="">First Name</label>
-            <input type="text" class="form-control" name="fname">
+            <input type="text" class="form-control" name="fname" value="{{ $user->first_name }}">
         </div>
         <div class="form-group">
             <label for="">Last Name</label>
-            <input type="text" class="form-control" name="lname">
+            <input type="text" class="form-control" name="lname" value="{{ $user->last_name }}">
         </div>
         <div class="form-group">
             <label for="">Email</label>
-            <input type="text" class="form-control" name="email">
+            <input type="text" class="form-control" name="email" value="{{ $user->email }}">
         </div>
         <div class="form-group">
             <label for="">Password</label>
