@@ -2,11 +2,11 @@
 
 
 Route::group(['middleware' => 'auth'], function (){
-    Route::get('/','UserController@index')->name('users.list');
-    Route::post('users','UserController@store')->name('users.store');
+    Route::get('users/list','UserController@listUsers')->name('users.list');
+    Route::post('users/store','UserController@store')->name('users.store');
     Route::get('users/create','UserController@create')->name('users.create');
-    Route::get('users/{id}/edit','UserController@edit')->name('users.edit');
-    Route::post('users/{id}','UserController@update')->name('users.update');
+    Route::get('users/edit/{id}','UserController@edit')->name('users.edit');
+    Route::post('users/update/{id}','UserController@update')->name('users.update');
     Route::get('logout', 'UserController@logout')->name('auth.logout');
 });
 

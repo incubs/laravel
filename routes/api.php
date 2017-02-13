@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+Route::group(['middleware' => ['auth-token']], function (){
+    Route::get('users', 'ApiController@users');
+    Route::get('users/{user}', 'ApiController@getUser');
+});

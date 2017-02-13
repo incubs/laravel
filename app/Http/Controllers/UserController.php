@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\AuthToken;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -10,9 +11,9 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
 
-    public function index()
+    public function listUsers()
     {
-        $users = User::with('role')->paginate(10);// from role how it got name
+        $users = User::with('role')->paginate(10);
         return view('users.list', ['users' => $users]);
     }
 
@@ -48,7 +49,10 @@ class UserController extends Controller
     public function postLogin(Request $request)
     {
         if (Auth::attempt($request->only(['email', 'password']))) {
-            return redirect()->intended('users.list');
+            $user = Auth::user();
+            $user->createToken();
+            $user->save();
+            return redirect()->route('users.list');
         }
 
         return redirect()->back()->with('message', '<div class="alert alert-danger">Wrong Username / Password Combination</div>');
@@ -65,19 +69,20 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $roles = Role::all();
-        return view('users.edit', ['roles' => $roles,'user' => $user]);
+        return view('users.edit', ['roles' => $roles, 'user' => $user]);
     }
 
-    public function update( Request $request, $id)
+    public function update(Request $request, $id)
     {
-       $user = User::find($id);
+        $user = User::find($id);
+        $user->first_name = $request->get('fname');
         $userArr = [
-            'first_name' => $request->get('fname'),
             'last_name' => $request->get('lname'),
             'email' => $request->get('email'),
             'password' => bcrypt($request->get('password'))
         ];
-        $user->update($userArr);
+        $user->fill($userArr);
+        $user->save();
         return redirect()->route('users.list');
     }
 
