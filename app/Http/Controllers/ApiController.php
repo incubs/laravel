@@ -13,8 +13,8 @@ class ApiController extends Controller
         return User::all();
     }
 
-    public function getUser( User $user )
+    public function getUser(  $user )
     {
-        return $user;
+        return User::find($user);
     }
 }
