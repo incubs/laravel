@@ -17,4 +17,19 @@ class ApiController extends Controller
     {
         return User::find($user);
     }
+
+    public function createUser( Request $request )
+    {
+        $user = User::create($request->all());
+
+        return ['status' => 'success', 'message' => 'User successfully created', 'data' => $user];
+    }
+
+    public function updateUser( User $user, Request $request)
+    {
+        $user->update($request->all());
+
+        return ['message' => 'User Succeffully updated','data' => $user];
+    }
+
 }

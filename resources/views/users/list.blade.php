@@ -9,6 +9,7 @@
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Action</th>
             </tr>
             @foreach($users as $user )
                 <tr>
@@ -16,6 +17,7 @@
                     <td>{{ $user->last_name}}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->role->name or '' }}</td>
+                    <td><a class="btn btn-info" href="{{ route('users.edit', [$user->id]) }}">Edit</a></td>
                 </tr>
             @endforeach
 

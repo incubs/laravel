@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\AuthToken;
+use App\Http\Requests\AddUserForm;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -13,7 +14,8 @@ class UserController extends Controller
 
     public function listUsers()
     {
-        $users = User::with('role')->paginate(10);
+        $users = User::with('role')->latest('updated_at')->paginate(10);
+        //dd($users);
         return view('users.list', ['users' => $users]);
     }
 
@@ -24,21 +26,20 @@ class UserController extends Controller
         return view('users.create', ['roles' => $roles]);
     }
 
-    public function store(Request $request)
+    public function store(AddUserForm $request)//can data be saved throuch get method
     {
-
         $role = Role::find($request->get('role_id'));
 
         $userArr = [
             'first_name' => $request->get('fname'),
             'last_name' => $request->get('lname'),
             'email' => $request->get('email'),
-            'password' => bcrypt($request->get('password'))
+            'password' => $request->get('password')
         ];
 
         $role->users()->create($userArr);
 
-        return redirect('/');
+        return redirect('users/list');//users.list do not recognize
     }
 
     public function login()
@@ -75,6 +76,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
+        //dd($user);
         $user->first_name = $request->get('fname');
         $userArr = [
             'last_name' => $request->get('lname'),

@@ -13,9 +13,11 @@ class User extends Authenticatable
      * The attributes that are mass assignable.
      *
      * @var array
+     *
      */
+    // protected  $table='users';
     protected $fillable = [
-        'first_name', 'email', 'last_name','role_id', 'password'
+        'first_name', 'email', 'last_name', 'role_id', 'password'
     ];
 
     /**
@@ -24,14 +26,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token','created_at'
+        'password', 'remember_token', 'created_at', 'auth_token'
     ];
 
     protected $appends = ['name'];
 
     public function role()
     {
-        return $this->belongsTo(Role::class,'role_id'); //how does it relates to id of role
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
     public function getNameAttribute()
@@ -41,11 +43,16 @@ class User extends Authenticatable
 
     public function createToken()
     {
-        $this->auth_token = md5($this->email . time(). str_random(8));
+        $this->auth_token = md5($this->email . time() . str_random(8)); //auth_token not in fillable
     }
 
     public function scopeWithToken($query, $token)
     {
         return $query->where('auth_token', $token)->whereNotNull('auth_token');
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
     }
 }

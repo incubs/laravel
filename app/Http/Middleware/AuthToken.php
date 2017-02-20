@@ -17,6 +17,7 @@ class AuthToken
      */
     public function handle($request, Closure $next)
     {
+      // dd($request);
         $user = User::withToken($request->get('token'))->first();
         if($user) {
             return $next($request);
